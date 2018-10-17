@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".okhttp.MainActivity">
+
+    <Button
+        android:id="@+id/id_btn_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="get"/>
+
+    <Button
+        android:id="@+id/id_btn_post"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="post"/>
+
+    <Button
+        android:id="@+id/id_btn_post_str"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="post string"/>
+
+    <Button
+        android:id="@+id/id_btn_post_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="post file"/>
+
+    <Button
+        android:id="@+id/id_btn_upload_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="upload pic"/>
+
+    <Button
+        android:id="@+id/id_btn_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="download"/>
+
+    <Button
+        android:id="@+id/id_btn_download_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="download pic"/>
+
+
+    <ImageView
+        android:layout_margin="20dp"
+        android:id="@+id/id_iv_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_launcher"/>
+
+</LinearLayout>
