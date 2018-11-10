@@ -88,7 +88,10 @@ public class ChatActivity extends AppCompatActivity implements Runnable {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.id_btn_send:
-                send();
+                new Thread(() -> {
+                    send();
+                }).start();
+
                 break;
             case R.id.id_btn_name:
                 new Thread(() -> {

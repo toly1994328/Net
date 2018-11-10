@@ -7,6 +7,7 @@ package com.toly1994.uploader;
  * 说明：
  */
 public class Cons {
-    public static final String BASE_URL="http://192.168.43.60:8080/";
+//    public static final String BASE_URL="http://192.168.43.60:8080/";
+    public static final String BASE_URL="http://192.168.10.107:8080/";
 //    public static final String BASE_URL="http://www.toly1994.com:8089/";
 }

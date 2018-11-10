@@ -22,10 +22,7 @@
         </activity>
 
         <activity android:name=".tcp.IPActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+
         </activity>
         <activity android:name=".tcp.TCPClientActivity"/>
         <activity android:name=".tcp.TCPServerActivity"/>
@@ -34,6 +31,10 @@
         </activity>
 
         <activity android:name=".activity.ChatActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
 
         </activity>
         <activity android:name=".activity.PmsActivity"/>

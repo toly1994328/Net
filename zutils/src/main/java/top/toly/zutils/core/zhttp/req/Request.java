@@ -1,10 +1,7 @@
 package top.toly.zutils.core.zhttp.req;
 
 import android.text.TextUtils;
-import android.webkit.MimeTypeMap;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +16,7 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
 
 import top.toly.zutils.core.zhttp.CountOutputStream;
+import top.toly.zutils.core.zhttp.itf.Binary;
 
 /**
  * 作者：张风捷特烈<br/>
@@ -30,6 +28,7 @@ public abstract class Request<T> {
 
     /**
      * 解析服务器返回数据
+     *
      * @param repByteArray 服务器返回数据
      * @return 解析后数据
      */
@@ -181,8 +180,8 @@ public abstract class Request<T> {
         for (KV kv : kvs) {
             String key = kv.getKey();
             Object value = kv.getValue();
-            if (value instanceof File) {
-                writeFormFileData(os, key, (File) value);
+            if (value instanceof Binary) {
+                writeFormFileData(os, key, (Binary) value);
             } else {
                 writeFormStringData(os, key, (String) value);
             }
@@ -229,7 +228,7 @@ public abstract class Request<T> {
      * @param key   键
      * @param value 文件
      */
-    private void writeFormFileData(OutputStream os, String key, File value) throws IOException {
+    private void writeFormFileData(OutputStream os, String key, Binary value) throws IOException {
         //===================描述file:<input type="file"/>================
         // --boundary
         // Content-Disposition:form-data;name="KeyName";filename="xxx.xxx"
@@ -239,38 +238,23 @@ public abstract class Request<T> {
         //--boundary--
 
         StringBuilder sb = new StringBuilder();
-        String fileName = value.getName();
-
         // --boundary
         sb.append(preFixBoundary).append("\r\n");
         // Content-Disposition:form-data;name="KeyName";filename="xxx.xxx"
         sb.append("Content-Disposition: form-data; name=\"").append(key)
-                .append("\"; filename=\"").append(fileName).append("\"").append("\r\n");
-
-        //获取MimeType
-        String mimeType = "application/octet-stream";//所有二进制文件通用的 MimeType
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        if (mimeTypeMap.hasExtension(fileName)) {
-            String extension = MimeTypeMap.getFileExtensionFromUrl(fileName);
-            mimeType = mimeTypeMap.getMimeTypeFromExtension(extension);
-        }
+                .append("\"; filename=\"").append(value.getFileName()).append("\"").append("\r\n");
 
         //Content-Type: 对应MimeTypeMap
-        sb.append("Content-Type: ").append(mimeType).append("\r\n");
+        sb.append("Content-Type: ").append(value.getMimeType()).append("\r\n");
         // 空行
         sb.append("\r\n");
         os.write(sb.toString().getBytes(mCharSet));
 
         //file stream
         if (os instanceof CountOutputStream) {
-            ((CountOutputStream) os).write(value.length());
+            ((CountOutputStream) os).write(value.getBinaryLength());
         } else {
-            FileInputStream fis = new FileInputStream(value);
-            byte[] buf = new byte[1024 * 2];
-            int len = 0;
-            while ((len = fis.read(buf)) != -1) {
-                os.write(buf, 0, len);
-            }
+            value.onWriteBinary(os);
         }
     }
 
@@ -314,7 +298,7 @@ public abstract class Request<T> {
     protected boolean hasFile() {
         for (KV kv : kvs) {
             Object v = kv.getValue();
-            if (v instanceof File) {
+            if (v instanceof Binary) {
                 return true;
             }
 

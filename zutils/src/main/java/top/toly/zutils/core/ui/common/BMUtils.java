@@ -18,9 +18,12 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import top.toly.zutils.core.io.FileHelper;
 
@@ -60,6 +63,7 @@ public class BMUtils {
 
 
     private static final Canvas sCanvas = new Canvas();
+
     /**
      * 通过一个View获取Bitmap
      *
@@ -159,5 +163,18 @@ public class BMUtils {
         bitmap.recycle();
         rs.destroy();
         return outBitmap;
+    }
+
+    /**
+     * 将bitmap转化为输入流
+     *
+     * @param bitmap Bitmap
+     * @return 输入流
+     */
+    public static InputStream bitmap2InputStream(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        InputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+        return isBm;
     }
 }

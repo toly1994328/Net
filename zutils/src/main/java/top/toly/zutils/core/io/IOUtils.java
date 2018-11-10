@@ -42,9 +42,9 @@ public class IOUtils {
 
 
     public static byte[] read2bytes(InputStream is) {
-        ByteArrayOutputStream baos = null;
         try {
             byte[] buf = new byte[1024];
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int len;
             while ((len = is.read(buf)) != -1) {
                 baos.write(buf, 0, len);
@@ -53,9 +53,6 @@ public class IOUtils {
         } catch (IOException e) {
             e.printStackTrace();
             return "ERROR".getBytes();
-        } finally {
-            close(is);
-            close(baos);
         }
     }
 

@@ -1,1 +1,1 @@
-include ':app',':zutils', ':downloader', ':uploader'
+include ':app',':zutils', ':downloader', ':uploader', ':appserver'

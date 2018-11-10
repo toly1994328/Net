@@ -1,5 +1,6 @@
 package com.toly1994.uploader.moreFileUpload;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -23,16 +24,20 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.toly.zutils.core.zhttp.itf.Listener;
+import top.toly.zutils.core.io.IOUtils;
+import top.toly.zutils.core.shortUtils.L;
+import top.toly.zutils.core.shortUtils.ToastUtil;
+import top.toly.zutils.core.ui.common.BMUtils;
+import top.toly.zutils.core.ui.common.ScrUtil;
 import top.toly.zutils.core.zhttp.Poster;
+import top.toly.zutils.core.zhttp.itf.Listener;
+import top.toly.zutils.core.zhttp.itf.binaryImpl.FileBinary;
+import top.toly.zutils.core.zhttp.itf.binaryImpl.InputStreamBinary;
 import top.toly.zutils.core.zhttp.rep.Response;
 import top.toly.zutils.core.zhttp.req.Request;
 import top.toly.zutils.core.zhttp.req.RequestExecutor;
 import top.toly.zutils.core.zhttp.req.RequestMethod;
 import top.toly.zutils.core.zhttp.req.reqImpl.StringRequest;
-import top.toly.zutils.core.io.IOUtils;
-import top.toly.zutils.core.shortUtils.L;
-import top.toly.zutils.core.shortUtils.ToastUtil;
 
 /**
  * 作者：张风捷特烈<br/>
@@ -82,24 +87,44 @@ public class MoreActivity extends AppCompatActivity {
                 break;
             case R.id.id_btn_post_str:
 
-                File file = new File(Environment.getExternalStorageDirectory(), "DCIM/Camera/iv_500x400.png");
-                File file2 = new File(Environment.getExternalStorageDirectory(), "JVM/对象的访问定位.png");
-                File file3 = new File(Environment.getExternalStorageDirectory(), "JVM/共享变量可见性.png");
-                File file4 = new File(Environment.getExternalStorageDirectory(), "JVM/标记整理.png");
-                File file5 = new File(Environment.getExternalStorageDirectory(), "JVM/可达性分析.png");
-                File file6 = new File(Environment.getExternalStorageDirectory(), "JVM/复制算法.png");
-                File file7 = new File(Environment.getExternalStorageDirectory(), "JVM/虚拟机栈.png");
+                File sdDir = Environment.getExternalStorageDirectory();
+                File file = new File(sdDir, "DCIM/Camera/iv_500x400.png");
+                File file2 = new File(sdDir, "JVM/对象的访问定位.png");
+                File file3 = new File(sdDir, "JVM/共享变量可见性.png");
+                File file4 = new File(sdDir, "JVM/标记整理.png");
+                File file5 = new File(sdDir, "JVM/可达性分析.png");
+                File file6 = new File(sdDir, "JVM/复制算法.png");
+                File file7 = new File(sdDir, "JVM/虚拟机栈.png");
 
 
                 Request<String> request = new StringRequest(Cons.BASE_URL + "upload", RequestMethod.POST);
 
-                request.add("file", file);
-                request.add("file", file2);
-                request.add("file", file3);
-                request.add("file", file4);
-                request.add("file", file5);
-                request.add("file", file6);
-                request.add("file", file7);
+                request.add("file", new FileBinary(file));
+                request.add("file", new FileBinary(file2));
+                request.add("file", new FileBinary(file3));
+                request.add("file", new FileBinary(file4));
+                request.add("file", new FileBinary(file5));
+                request.add("file", new FileBinary(file6));
+                FileBinary fileBinary = new FileBinary(file7);
+
+                fileBinary.setOnProgressListener((progress) -> {
+                    L.d("file7" + "===============" + progress + L.l());
+                    mIdBtnPostStr.setText(progress+"%");
+                });
+
+                request.add("file", fileBinary);
+
+                //将当前屏幕截图上传到服务器
+                Bitmap bitmap = ScrUtil.snapShotWithStatusBar(this);
+                InputStreamBinary isb = new InputStreamBinary(BMUtils.bitmap2InputStream(bitmap), "screen.png");
+
+                //设置进度监听
+                isb.setOnProgressListener((progress) -> {
+                    L.d("screen" + "===============" + progress + L.l());
+                    mIdBtnUploadPic.setText(progress+"%");
+
+                });
+                request.add("file", isb);
 
                 RequestExecutor.INSTANCE.execute(request, new Listener<String>() {
                     @Override

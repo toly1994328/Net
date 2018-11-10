@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/appserver" />
             <option value="$PROJECT_DIR$/downloader" />
             <option value="$PROJECT_DIR$/uploader" />
             <option value="$PROJECT_DIR$/zutils" />

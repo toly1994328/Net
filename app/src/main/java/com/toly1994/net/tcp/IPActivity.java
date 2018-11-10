@@ -61,7 +61,6 @@ public class IPActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.e(TAG, "onCreate: " + IpUtils.getIPAddress(IPActivity.this));
-
                 Message obtain = Message.obtain();
                 obtain.obj = IpUtils.getIPAddress(IPActivity.this);
                 mHandler.sendMessage(obtain);
